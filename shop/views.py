@@ -17,7 +17,8 @@ def home_view(request):
 
     categories = Category.objects.filter(is_active=True)
     return render(request, 'shop/home.html',
-                  {'popular_products': popular_products,
+                  {
+                      # 'popular_products': popular_products,
                            'promotions': promotions,
                            'categories': categories,
                             'breadcrumbs': [{'title': 'Главная', 'url': '/'}]})
