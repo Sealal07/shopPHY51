@@ -21,5 +21,4 @@ from shop.views import home_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('shop.urls', 'shop'), namespace='shop')),
-    path('', home_view, name='home'),
 ]
