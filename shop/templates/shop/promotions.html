@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<h1 style="color: var(--primary-color);">Сладкие акции</h1>
+<p style="color: #666; margin-bottom: 40px;">Успейте попробовать по выгодной цене</p>
 
-</body>
-</html>
+<div class="product-grid">
+    {% for product in promotions %}
+        <div class="product-card" style="position: relative;">
+            <div class="badge-discount">-{{ product.discount_percent }}%</div>
+            <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: inherit;">
+                <img src="{{ product.images.first.image.url }}" class="product-image">
+                <h3 style="margin: 15px 0 5px;">{{ product.name }}</h3>
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                    <span class="price-new">{{ product.discount_price|floatformat:0 }} ₽</span>
+                    <span class="price-old">{{ product.price }} ₽</span>
+                </div>
+                <p style="color: #388e3c; font-size: 0.85rem; margin-top: 5px;">Экономия: {{ product.price|add:"-product.discount_price" }} ₽</p>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

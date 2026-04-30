@@ -1,20 +1,20 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Sweety{% endblock %}</title>
+    <title>{% block title %}Сладкий Мир{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
         <div class="container header-flex">
-            <a href="/" class="logo">SWEETY</a>
+            <a href="/" class="logo">Сладкий Мир</a>
             <nav class="nav-links">
-                <a href="{% url 'shop:category_list' %}">Каталог</a>
-                <a href="{% url 'shop:promotions' %}"
-                   style="color: var(--primary-color)">Акции</a>
-                <a href="{% url 'cart:cart_detail' %}">🛒</a>
+                <a href="{% url 'shop:category-list' %}">Каталог</a>
+                <a href="{% url 'shop:promotions' %}" style="color: var(--primary-color)">Акции</a>
+                <a href="{% url 'cart:cart_detail' %}">🛒 ({{ cart_total_items|default:0 }})</a>
                 {% if user.is_authenticated %}
                     <a href="{% url 'accounts:profile' %}">Профиль</a>
                     <a href="{% url 'accounts:logout' %}">Выйти</a>
@@ -24,11 +24,21 @@
             </nav>
         </div>
     </header>
-    <main class="container">
+
+    <main class="container" style="padding-top: 40px; min-height: 80vh;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         {% block content %}{% endblock %}
     </main>
-    <footer style="background: var(--secondary-color)">
-        <p>&copy; {% now 'Y' %} Все права защищены</p>
+
+    <footer style="background: var(--secondary-color); padding: 40px 0; margin-top: 60px; border-top: 1px solid var(--border-color);">
+        <div class="container" style="text-align: center;">
+            <p>&copy; {% now "Y" %} Сладкий Мир. Все права защищены.</p>
+        </div>
     </footer>
 </body>
 </html>

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if success %}
+    <div style="max-width: 600px; margin: 80px auto; text-align: center; background: white; padding: 40px; border-radius: 20px; border: 1px solid var(--border-color);">
+        <h1 style="color: var(--text-color); margin-bottom: 15px;">Заказ оформлен!</h1>
+        <p style="color: #666; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+            Спасибо за покупку в «Сладком Мире»! <br> Мы свяжемся с вами в ближайшее время для подтверждения.
+        </p>
+        <a href="/" class="btn" style="padding: 12px 30px;">Вернуться на главную</a>
+    </div>
+{% else %}
+    <h1 style="margin-bottom: 40px;">Оформление заказа</h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 30px; align-items: start;">
+
+        <div style="background: white; padding: 30px; border-radius: 15px; border: 1px solid var(--border-color);">
+            <h2 style="margin-top: 0; margin-bottom: 25px; font-size: 1.25rem; border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px;">
+                Данные получателя
+            </h2>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Имя *</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" required placeholder="Ваше имя">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Телефон *</label>
+                        <input type="text" name="phone" value="{{ user.phone|default:'' }}" required placeholder="+7 (___) ___-__-__">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Адрес доставки *</label>
+                    <textarea name="address" required rows="3" placeholder="Город, улица, дом, квартира" style="resize: none;">{{ user.address|default:'' }}</textarea>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <label class="form-label">Комментарий к заказу</label>
+                    <textarea name="comment" rows="2" placeholder="Например: пожелания по времени или код домофона" style="resize: none;"></textarea>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; padding: 15px; font-size: 1.1rem; margin-top: 10px;">
+                    Подтвердить и оплатить
+                </button>
+            </form>
+        </div>
+
+        <div style="background: var(--secondary-color); padding: 25px; border-radius: 15px; position: sticky; top: 100px;">
+            <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 1.1rem;">Ваш заказ</h2>
+
+            <div style="margin-bottom: 20px; max-height: 400px; overflow-y: auto;">
+                {% for item in cart %}
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div style="max-width: 70%;">
+                            <p style="margin: 0; font-size: 0.9rem; font-weight: 600;">{{ item.product.name }}</p>
+                            <p style="margin: 3px 0 0; font-size: 0.8rem; color: #666;">
+                                {{ item.quantity }} × {{ item.discount_price|floatformat:0 }} ₽
+                            </p>
+                        </div>
+                        <span style="font-weight: bold; font-size: 0.9rem;">
+                            {{ item.total_price|floatformat:0 }} ₽
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div style="border-top: 2px solid var(--border-color); pt-20px; margin-top: 15px; padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span style="color: #666;">Скидка:</span>
+                    <span style="color: var(--primary-color);">-{{ cart.get_total_discount|floatformat:0 }} ₽</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; font-size: 1.1rem;">Итого:</span>
+                    <span style="font-size: 1.5rem; font-weight: 800; color: var(--text-color);">
+                        {{ cart.get_total_price|floatformat:0 }} ₽
+                    </span>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 15px;">
+                Нажимая кнопку, вы соглашаетесь с условиями доставки и обработки данных.
+            </p>
+        </div>
+
+    </div>
+{% endif %}
+
+{% endblock %}

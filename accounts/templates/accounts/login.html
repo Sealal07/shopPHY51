@@ -1,18 +1,23 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block content %}
 <div class="form-container">
-    <h2>Вход в личный кабинет</h2>
+    <h2 style="text-align: center; margin-bottom: 30px;">Вход в систему</h2>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
             <label class="form-label">Логин</label>
-            <input type="text" name="username" required>
+            <input type="text" name="username" placeholder="Введите ваш логин" required>
         </div>
         <div class="form-group">
             <label class="form-label">Пароль</label>
-            <input type="password" name="password" required>
+            <input type="password" name="password" placeholder="********" required>
         </div>
-        <button type="submit" class="btn">Войти</button>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Войти</button>
     </form>
+
+    <p style="text-align: center; margin-top: 25px; font-size: 14px;">
+        Нет аккаунта? <a href="{% url 'accounts:register' %}" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Зарегистрироваться</a>
+    </p>
 </div>
 {% endblock %}

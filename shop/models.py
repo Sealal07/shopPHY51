@@ -22,7 +22,7 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         from django.urls import reverse #генерирует url
-        return reverse('shop:category_detail', kwargs={'slug': self.slug})
+        return reverse('shop:category-detail', kwargs={'slug': self.slug})
 
 class Product(models.Model):
     name = models.CharField('Название',max_length=100)
@@ -64,7 +64,10 @@ class Product(models.Model):
         return self.discount_percent > 0
 
     def total_order(self):
-        pass
+        from orders.models import OrderItem
+        return OrderItem.objects.filter(product=self).aggregate(
+            total=models.Sum('quantity')
+        )['total'] or 0
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images', verbose_name='Товар')

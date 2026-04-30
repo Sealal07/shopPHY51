@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ category.name }}</title>
-</head>
-<body>
-    <h1>{{ category.name }}</h1>
-
-    {% for product in products %}
-        <div>{{ product.name }}</div>
-    {% endfor %}
-
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1 style="margin: 40px 0;">Наш ассортимент</h1>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card" style="position: relative;">
+            <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: inherit;">
+                {% if product.images.first %}
+                    <img src="{{ product.images.first.image.url }}" class="product-image">
+                {% else %}
+                    <div class="product-image" style="background: var(--secondary-color); display: flex; align-items: center; justify-content: center; font-size: 3rem;">🍰</div>
+                {% endif %}
+                <h3 style="margin: 15px 0 5px;">{{ product.name }}</h3>
+                <p class="price-new">{{ product.price }} ₽</p>
+                <span class="btn" style="width: 100%; text-align: center; box-sizing: border-box; margin-top: 10px;">Подробнее</span>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,17 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Магазин</title>
-</head>
-<body>
-    <h1>Добро пожаловать в магазин!</h1>
+{% extends "base.html" %}
+{% block content %}
+<section style="background: var(--primary-color); color: white; padding: 60px; border-radius: 20px; text-align: center; margin-bottom: 40px;">
+    <h1>Свежие кондитерские изделия</h1>
+    <p>Торты, пирожные и печенье с любовью к каждой детали</p>
+    <br>
+    <a href="{% url 'shop:category-list' %}" class="btn" style="background: white; color: var(--primary-color) !important;">В каталог</a>
+</section>
 
+<h2>Популярные товары</h2>
+<div class="product-grid">
     {% for product in popular_products %}
-        <div>{{ product.name }}</div>
+    <div class="product-card">
+        {% if product.images.first %}
+            <img src="{{ product.images.first.image.url }}" class="product-image">
+        {% else %}
+            <div class="product-image" style="background: var(--secondary-color); display: flex; align-items: center; justify-content: center; font-size: 40px;">🍰</div>
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <p style="color: var(--primary-color); font-weight: bold;">{{ product.price }} ₽</p>
+        <a href="{{ product.get_absolute_url }}" class="btn" style="width: 100%; text-align: center; box-sizing: border-box;">Смотреть</a>
+    </div>
     {% endfor %}
-
-    <!-- Для теста -->
-    <div>Медовик</div>
-</body>
-</html>
+</div>
+{% endblock %}
